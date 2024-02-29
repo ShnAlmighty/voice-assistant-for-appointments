@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const appointmentRoutes = require('./src/routes/appointments');
+const voiceCallRoutes = require('./src/routes/voicecalls');
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.get('/', (req, res) => {
 app.use(express.json());
 
 app.use('/appointments', appointmentRoutes);
+app.use('/voicecalls', voiceCallRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
