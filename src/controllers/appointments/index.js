@@ -2,7 +2,16 @@ const Appointment = require('../../models/appointment');
 
 const createAppointment = async(req, res) => {
   try {
-    const appointment = new Appointment(req.body);
+    const { doctorName, appointmentTime } = req.body;
+    if(!doctorName || !appointmentTime){
+      throw new Error("Kindly provide the necessary details");
+    }
+    const appointmentObj = {
+      doctorName,
+      appointmentTime,
+      status: 'available' 
+    }
+    const appointment = new Appointment(appointmentObj);
     await appointment.save();
     res.status(201).json({ message: 'Appointment scheduled successfully', appointment });
   } catch (error) {
@@ -24,7 +33,7 @@ const readAppointment = async (req, res) => {
 
 const readAllAppointments = async (req, res) => {
   try {
-    const status = req?.query?.status ?? 'scheduled';
+    const status = req?.query?.status ?? 'available';
     const appointments = await Appointment.find({ status });
     if (appointments.length == 0) {
       return res.status(404).json({ error: 'Appointments not found' });
