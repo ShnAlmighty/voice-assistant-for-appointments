@@ -27,6 +27,7 @@ const createAppointment = async(req, res) => {
 const schedulePatientAppointment = async(req, res) => {
   const twiml = new VoiceResponse();
   const userInput = xss(req.body.SpeechResult);
+  console.log({userInput});
   try {
     const { date_utc } = extractDateTime(userInput);
     console.log({date_utc})
@@ -108,7 +109,7 @@ const cancelPatientAppointment = async(req, res) => {
   try {
     const patientContact = xss(req.body.From);
     const userInput = xss(req.body.SpeechResult);
-    console.log({userInput})
+    console.log({userInput});
     const choice = reduceConfirmation(userInput);
     console.log({userInput, choice})
 
