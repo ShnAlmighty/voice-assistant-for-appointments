@@ -93,7 +93,7 @@ const handleQuery = async(req, res) => {
     if (intent == 'Schedule') {
       const scheduledSlot = await Appointment.findOne({ patientContact: req.body.From, status: 'scheduled' }).lean();
       if(scheduledSlot){
-        twiml.say('It looks like you already have an appointment, kindly cancel it or reschedule it from the main menu');
+        twiml.say('It looks like you already have an appointment, kindly cancel or reschedule it before proceeding.');
         twiml.redirect('/voicecalls/menu');
       } else {
         const availableSlots = await Appointment.find({status: 'available'}).sort('appointmentTime').limit(10).lean();
@@ -126,7 +126,7 @@ const handleQuery = async(req, res) => {
           gather.say('You can say the desired appointment day followed by the time now');
         } 
       }
-    } else if (intent == 'reschedule') {
+    } else if (intent == 'Reschedule') {
       const scheduledSlot = await Appointment.findOne({ patientContact: req.body.From });
       if (!scheduledSlot) {
         twiml.say('Sorry, you have no scheduled appoinment. If you want to schedule an appointment, I can help you with that.');
@@ -139,14 +139,14 @@ const handleQuery = async(req, res) => {
         twiml.say(`${formattedTime} with ${scheduledSlot.doctorName}`);
 
         const gather = twiml.gather({
-          action: '/appointments/schedule',
+          action: '/appointments/schedule/reschedule',
           input: 'speech',
           speechTimeout: 5,
-          method: 'PATCH'
+          method: 'POST'
         });
         gather.say('Do you want to reschedule this appointment?');
       }
-    } else if (intent == 'cancel') {
+    } else if (intent == 'Cancel') {
       const scheduledSlot = await Appointment.findOne({ patientContact: req.body.From, status: 'scheduled' }).lean();
 
       if (!scheduledSlot) {
@@ -160,10 +160,10 @@ const handleQuery = async(req, res) => {
         twiml.say(`${formattedTime} with ${scheduledSlot.doctorName}`);
 
         const gather = twiml.gather({
-          action: '/appointments/schedule',
+          action: '/appointments/schedule/cancel',
           input: 'speech',
           speechTimeout: 5,
-          method: 'DELETE'
+          method: 'POST'
         });
         gather.say('Do you want to cancel this appointment?');
       }      

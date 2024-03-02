@@ -138,7 +138,7 @@ Response Schema
 | `appointment.status` | `string` | Status of the appointment |
 
 ### End User Voice call APIs 
-These APIs are used for Twilio routing and call management whenever an end user calls the business number. 
+These APIs are used for Twilio routing and call management whenever an end user calls the business number. Note: Twilio only allows POST and GET methods for APIs.
 
 #### Handle Incoming Call
 - A webhook which is invoked by Twilio whenever an end user calls the business number
@@ -167,13 +167,13 @@ POST /appointments/schedule
 #### Reschedule Appointment for the End User
 - This API is used to reschedule an appointment for the end user based on their speech input
 ```http
-PATCH /appointments/schedule
+POST /appointments/schedule/reschedule
 ```
 
 #### Cancel Appointment for the End User
 - This API is used to cancel the appointment for the end user based on their speech input
 ```http
-DELETE /appointments/schedule
+POST /appointments/schedule/cancel
 ```
 
 ## Contributing

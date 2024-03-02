@@ -15,13 +15,13 @@ router.get('/all', appointmentController.readAllAppointments);
 router.get('/:id', appointmentController.readAppointment);
 
 // Cancel a patient's appointment
-router.delete('/schedule', appointmentController.cancelPatientAppointment);
+router.post('/schedule/cancel', appointmentController.cancelPatientAppointment);
 
 // Cancel an appointment
 router.delete('/:id', appointmentController.deleteAppointment);
 
 // Reschedule a patient's appointment
-router.patch('/schedule', appointmentController.reschedulePatientAppointment);
+router.post('/schedule/reschedule', appointmentController.reschedulePatientAppointment);
 
 // Reschedule an appointment
 router.patch('/:id', appointmentController.updateAppointment);
