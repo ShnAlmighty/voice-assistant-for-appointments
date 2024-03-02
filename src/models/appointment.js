@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const appointmentSchema = new mongoose.Schema({
-  patientName: {
+  patientContact: {
     type: String
   },
   doctorName: {
@@ -17,6 +17,10 @@ const appointmentSchema = new mongoose.Schema({
     enum: ['available','scheduled', 'cancelled'],
     default: 'available',
   },
+  created_at: {
+    type: Date,
+    default: new Date()
+  }
 });
 
 module.exports = mongoose.model('Appointment', appointmentSchema);
