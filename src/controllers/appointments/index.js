@@ -12,8 +12,8 @@ const createAppointment = async(req, res) => {
       throw new Error("Kindly provide the necessary details");
     }
     const appointmentObj = {
-      doctorName,
-      appointmentTime,
+      doctorName: xss(doctorName),
+      appointmentTime: xss(appointmentTime),
       status: 'available' 
     }
     const appointment = new Appointment(appointmentObj);
@@ -26,15 +26,16 @@ const createAppointment = async(req, res) => {
 
 const schedulePatientAppointment = async(req, res) => {
   const twiml = new VoiceResponse();
-  const userInput = req.body.SpeechResult;
+  const userInput = xss(req.body.SpeechResult);
   try {
     const { date_utc } = extractDateTime(userInput);
+    console.log({date_utc})
     const appointment = await Appointment.findOne({appointmentTime: date_utc });
     if(!appointment){
       twiml.say('Appointment at the given time is not found, kindly try again.');
       twiml.redirect('/voicecalls/menu');
     } else {
-      appointment.patientContact = req.body.From;
+      appointment.patientContact = xss(req.body.From);
       appointment.status = 'scheduled';
       await appointment.save();
 
@@ -59,7 +60,8 @@ const schedulePatientAppointment = async(req, res) => {
 
 const readAppointment = async (req, res) => {
   try {
-    const appointment = await Appointment.findById(req.params.id);
+    const appointment_id = xss(req.params.id);
+    const appointment = await Appointment.findById(appointment_id);
     if (!appointment) {
       return res.status(404).json({ error: 'Appointment not found' });
     }
@@ -72,7 +74,8 @@ const readAppointment = async (req, res) => {
 
 const readAllAppointments = async (req, res) => {
   try {
-    const status = req?.query?.status ?? 'available';
+    const query_status = req?.query?.status ?? 'available';
+    const status = xss(query_status);
     const appointments = await Appointment.find({ status });
     if (appointments.length == 0) {
       return res.status(404).json({ error: 'Appointments not found' });
@@ -86,7 +89,8 @@ const readAllAppointments = async (req, res) => {
 
 const deleteAppointment = async (req, res) => {
   try {
-    const appointment = await Appointment.findById(req.params.id);
+    const appointment_id = xss(req.params.id);
+    const appointment = await Appointment.findById(appointment_id);
     if (!appointment) {
       return res.status(404).json({ error: 'Appointment not found' });
     }
@@ -102,16 +106,29 @@ const deleteAppointment = async (req, res) => {
 const cancelPatientAppointment = async(req, res) => {
   const twiml = new VoiceResponse();
   try {
-    const patientContact = req.body.From; //TODO: use xss to parse this first
-    const userInput = req.body.SpeechResult;
+    const patientContact = xss(req.body.From);
+    const userInput = xss(req.body.SpeechResult);
+    console.log({userInput})
     const choice = reduceConfirmation(userInput);
     console.log({userInput, choice})
 
     if (choice == "Yes") {
       const appointment = await Appointment.findOne({ patientContact, status: 'scheduled' });
+
+      //Save the cancelled appointment as a document in DB for reference
+      const cancelled_appointment_obj = {
+        doctorName: appointment.doctorName,
+        appointmentTime: appointment.appointmentTime,
+        patientContact,
+        status: 'cancelled' 
+      };
+      const cancelled_appointment_doc = new Appointment(cancelled_appointment_obj);
+      await cancelled_appointment_doc.save();
+
       appointment.patientContact = undefined;
       appointment.status = 'available';
       await appointment.save();
+
       twiml.say('Your appointment with ' + appointment.doctorName + ' on ' + moment(appointment.appointmentTime).format('MMMM Do, YYYY, h:mm a') + ' is cancelled.');
       twiml.redirect('/voicecalls/menu');
     } else if(choice == "No") {
@@ -135,9 +152,10 @@ const cancelPatientAppointment = async(req, res) => {
 
 const updateAppointment = async (req, res) => {
   try {
-    const { id } = req.params;
+    const appointment_id  = xss(req.params.id);
     const { appointmentTime } = req.body;
-    const appointment = await Appointment.findByIdAndUpdate(id, { appointmentTime }, { new: true });
+    const appointmentTimeCleansed = xss(appointmentTime)
+    const appointment = await Appointment.findByIdAndUpdate(appointment_id, { appointmentTime: appointmentTimeCleansed }, { new: true });
     if (!appointment) {
       return res.status(404).json({ error: 'Appointment not found' });
     }
@@ -151,8 +169,8 @@ const updateAppointment = async (req, res) => {
 const reschedulePatientAppointment = async(req, res) => {
   const twiml = new VoiceResponse();
   try {
-    const patientContact = req.body.From; //TODO: use xss to parse this first
-    const userInput = req.body.SpeechResult;
+    const patientContact = xss(req.body.From); //TODO: use xss to parse this first
+    const userInput = xss(req.body.SpeechResult);
     const choice = reduceConfirmation(userInput);
     console.log({userInput, choice});
     if (choice == "Yes") {

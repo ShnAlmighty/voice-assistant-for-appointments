@@ -21,7 +21,8 @@
     "moment-timezone": "^0.5.45",
     "mongoose": "^8.2.0",
     "twilio": "^4.23.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "xss": "^1.0.14"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"
