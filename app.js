@@ -1,4 +1,5 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const appointmentRoutes = require('./src/routes/appointments');
@@ -21,6 +22,8 @@ app.get('/', (req, res) => {
 })
 
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
 
 app.use('/appointments', appointmentRoutes);
 app.use('/voicecalls', voiceCallRoutes);
