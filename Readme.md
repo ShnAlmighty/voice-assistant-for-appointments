@@ -1,7 +1,7 @@
 # AI Assistant for Clinic Appointments
 
 ## Information
-This repository showcases basic appointment management functionailties through voice call assistance with the help of simple APIs. It uses Twilio for voice call functionailties, Google Dialogflow for processing and working on user speech input and compromise library for processing user input for appointment management.
+This repository showcases basic appointment management functionailties through voice call assistance with the help of simple APIs. It uses `Twilio` for voice call functionailties, `Google Dialogflow` for processing and detecting user's intent and the `compromise` library for natural language processing to facilitate appointment management through user's speech.
 
 ## Prerequisites
  1. Create a Google Dialogflow app, a service account to access it and save the credential file within the project's root directory. **Important**: Make sure it is not commited with the repo, so, add it in the .gitignore file locally if you want.
