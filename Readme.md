@@ -13,7 +13,7 @@ This repository showcases basic appointment management functionailties through v
 | `Schedule` | If the user wants to schedule an appointment | `Schedule` | I want to schedule an appointment, I want to book an appointment, etc. |
 | `Reschedule` | If the user wants to redschedule their appointment | `Reschedule` | I want to reschedule my appointment, I want to reschedule, etc. |
 | `Cancel` | If the user wants to cancel their appointment | `Cancel` | I want to cancel my appointment, Please cancel my appointment |
-| `Done` | If the user wants to schedule an appointment | `Done` | Thanks, that's it, That is all, etc. |
+| `Done` | If the user wants to end the call | `Done` | Thanks, that's it, That is all, etc. |
 
  2. Create a Twilio account and have the SID, Authtoken and Business Number value placed in .env file as per the instructions below
 
