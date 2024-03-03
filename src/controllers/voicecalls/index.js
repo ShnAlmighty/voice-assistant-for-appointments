@@ -128,7 +128,7 @@ const handleQuery = async(req, res) => {
         } 
       }
     } else if (intent == 'Reschedule') {
-      const scheduledSlot = await Appointment.findOne({ patientContact: req.body.From });
+      const scheduledSlot = await Appointment.findOne({ patientContact: req.body.From, status: 'scheduled' });
       if (!scheduledSlot) {
         twiml.say('Sorry, you have no scheduled appoinment. If you want to schedule an appointment, I can help you with that.');
         twiml.redirect('/voicecalls/menu');
