@@ -4,11 +4,20 @@
 This repository showcases basic appointment management functionailties through voice call assistance with the help of simple APIs. It uses `Twilio` for voice call functionailties, `Google Dialogflow` for processing and detecting user's intent and the `compromise` library for natural language processing to facilitate appointment management through user's speech.
 
 ## Prerequisites
- 1. Create a Google Dialogflow app, a service account to access it and save the credential file within the project's root directory. **Important**: Make sure it is not commited with the repo, so, add it in the .gitignore file locally if you want.
+ 1. Google Dialogflow Setup\
+     i. Create a Google Dialogflow app, a service account to access it and save the credential file within the project's root directory. **Important**: Make sure it is not commited with the repo, so, add it in the .gitignore file locally if you want.\
+    ii. Create the following `Intents` with the given `Response` in the Dialogflow app. You can also add the training phrases by taking reference for the same below.
+
+| Intent | Description | Response                | Training Phrases                |
+| :-------- | :------------------------- | :------------------------- | :------------------------- |
+| `Schedule` | If the user wants to schedule an appointment | `Schedule` | I want to schedule an appointment, I want to book an appointment, etc. |
+| `Reschedule` | If the user wants to redschedule their appointment | `Reschedule` | I want to reschedule my appointment, I want to reschedule, etc. |
+| `Cancel` | If the user wants to cancel their appointment | `Cancel` | I want to cancel my appointment, Please cancel my appointment |
+| `Done` | If the user wants to schedule an appointment | `Done` | Thanks, that's it, That is all, etc. |
 
  2. Create a Twilio account and have the SID, Authtoken and Business Number value placed in .env file as per the instructions below
 
- 3. Have the env file placed in the project directory of your machine with the following details:
+ 3. Have the .env file placed in the project's root directory of your device with the following details:
 | Parameter | Description                |Example                |
 | :-------- | :------------------------- | :------------------------- |
 | `PORT` | Port for running the server | 3000
