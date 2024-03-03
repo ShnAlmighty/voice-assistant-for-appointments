@@ -89,6 +89,7 @@ const handleQuery = async(req, res) => {
     const response = responses[0].queryResult;
 
     const intent = response.intent.displayName;
+    console.log({intent});
 
     if (intent == 'Schedule') {
       const scheduledSlot = await Appointment.findOne({ patientContact: req.body.From, status: 'scheduled' }).lean();
@@ -167,6 +168,9 @@ const handleQuery = async(req, res) => {
         });
         gather.say('Do you want to cancel this appointment?');
       }      
+    } else if(intent == 'Done') {
+      twiml.say('I am happy that I can assist you, thanks for calling.');
+      twiml.hangup();
     } else {
       twiml.say('Sorry, I did not get that.');
       twiml.redirect('/voicecalls/menu');
